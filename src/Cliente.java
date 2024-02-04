@@ -3,7 +3,7 @@ import java.util.List;
 public class Cliente {
   private Integer codigo;
   private String nombre;
-  private List<ItemProducto> factura;
+  List<ItemProducto> factura;
 
   public Cliente(int codigo, String nombre, List<ItemProducto> factura) {
     this.codigo = codigo;
@@ -11,7 +11,18 @@ public class Cliente {
     this.factura = factura;
   }
 
-  public void anadirProducto(ItemProducto itemProducto) {
-    factura.add(itemProducto);
+  public synchronized void realizarCompra(Tienda tienda) {
+    System.out.println("Inicio de la compra");
+    for (ItemProducto item : factura) {
+      tienda.venderProducto(item.getCodProd(), item.getCantidad());
+      System.out.printf("Venta producto: %s - Cliente: %s\n", item.getCodProd(), nombre);
+      System.out.println("=================================================");
+    }
+    System.out.printf("Fin de cuenta de cliente: %s\n", nombre);
+    System.out.println("=================================================");
+  }
+
+  public int getCodCliente() {
+    return codigo;
   }
 }
